@@ -57,6 +57,22 @@ abstract class MultiCurl {
      * @param array $curlOptions Common CURL options.
      */
     public function __construct($curlOptions = array()) {
+		if(empty($curlOptions))
+		{
+			$header[] = "Accept: */*";
+			$header[] = "Cache-Control: max-age=0";
+			$header[] = "Accept-Charset: utf-8;q=0.7,*;q=0.7";
+			$header[] = "Accept-Language: en-us,en;q=0.5";
+			$header[] = "Pragma: ";
+			
+			$curlOptions=array(
+				CURLOPT_HEADER     		=> true,
+				CURLOPT_HTTPHEADER 		=> $header,
+				CURLOPT_USERAGENT  		=> 'Googlebot/2.1 (+http://www.google.com/bot.html)',
+			    CURLOPT_CONNECTTIMEOUT 	=> 20,
+			    CURLOPT_TIMEOUT 		=> 10
+			);
+		}
         $this->setCurlOptions($curlOptions);
     }
 
