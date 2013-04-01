@@ -1,0 +1,61 @@
+README (MultiCurl class)
+=========================================
+
+NAME: MultiCurl class
+
+VERSION: 1.07
+
+AUTHOR: Vadym Timofeyev <tvad@mail333.com> http://weblancer.net/users/tvv/
+
+DESCRIPTION:
+
+    MultiCurl class provides a convenient way to execute parallel HTTP(S)
+    requests via PHP MULTI CURL extension with additional restrictions.
+    For example: start 100 downloads with 2 parallel sessions, and get only
+    first 100 Kb per session.
+
+    Supported features:
+
+      - Set query for CURL multi sessions. The main idea you can use only
+        limited number of parallel requests. If you add next request and
+        the query is fully filled the script waits while one or some previous
+        CURL multi sessions will be completed.
+
+      - Set maximal size limit for downloaded content. Please note: it is
+        possible to download rather more bytes than the limit because download
+        operation uses internal buffer.
+ 
+      - Set common CURL options for all requests.
+ 
+      - Set separate CURL options for different requests if it is necessary.
+
+SYNOPSIS:
+
+    <?php
+    include_once 'MultiCurl.class.php';
+
+    class MyMultiCurl extends MultiCurl {
+        protected function onLoad($url, $content, $info) {
+            print "[$url] $content ";
+            print_r($info);
+        }
+    }
+
+    try {
+        $mc = new MyMultiCurl();
+        $mc->setMaxSessions(2); // limit 2 parallel sessions (by default 10)
+        $mc->setMaxSize(10240); // limit 10 Kb per session (by default 10 Mb)
+        $mc->addUrl('http://google.com');
+        $mc->addUrl('http://yahoo.com');
+        $mc->addUrl('http://altavista.com');
+        $mc->wait();
+    } catch (Exception $e) {
+        die($e->getMessage());
+    }
+    ?>
+
+COPYRIGHT:
+
+    Copyright (c) 2007 Vadym Timofeyev. All rights reserved.
+    This software is released under the GNU Lesser General Public License.
+    Please read the disclaimer at the top of the MultiCurl.class.php file.

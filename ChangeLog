@@ -1,0 +1,65 @@
+ChangeLog (MultiCurl class)
+=========================================
+
+2010-11-06 - version 1.07
+
+[*] Small improvements.
+
+2008-01-04 - version 1.06
+
+[*] Improve closeSession method and fix session destruction logic.
+    Therefore cookiejar works correctly now. Thanks to Mavook (ICQ 272990).
+
+2007-08-22 - version 1.05
+
+[+] MultiCurl class is abstract now.
+[+] Add abstract method OnLoad to MultiCurl class.
+    Required parameter $onLoadFunc is deleted from constructor now.
+[*] Change example file and move to ./examples directory.
+
+2007-08-18 - version 1.04
+
+[*] Improve destruction logic.
+
+2007-08-18 - version 1.03
+
+[*] Change source code documentation.
+[*] Change example file example.php.
+
+2007-08-13 - version 1.02
+
+[+] Add destructor, it closes correctly all opened sessions.
+    Thanks to Stanislav Malkin (from http://weblancer.net/users/ArtLab/).
+
+2007-08-13 - version 1.01
+
+[+] Add possibility to set maximal size limit for downloaded content.
+[+] Add setter and getter for maxSessions parameter.
+[+] Add TODO text file.
+[*] Migrate to license LGPL 3.0.
+[*] Fix defect in function addUrl for arrays.
+    Thanks to lyoxa (from http://weblancer.net/users/lyoxa/).
+
+2007-08-12 - version 1.00
+
+[+] Add primary documentation.
+[*] Code refactoring, some minor changes.
+
+2007-08-12 - version 0.02
+
+[+] Add possibility to setup common CURL options for all CURL multi sessions.
+[+] Setup separate CURL options for different CURL multi sessions.
+
+2007-08-11 - version 0.01
+
+[+] Primary version.
+    Thanks to Pavel Kudrin (from http://weblancer.net/users/pk2002/) for
+    initial discussion.
+[+] Set query for CURL multi sessions. The main idea you can use only
+    limited number of parallel requests. If you add next request, and
+    the query is fully filled, the script waits while one or some previous
+    CURL multi sessions will be completed.
+[+] Set maximal size limit for downloaded content. Please note: it is
+    possible to download rather more bytes than the limit because download
+    operation uses internal buffer.
+[+] Set common CURL options for all requests.
