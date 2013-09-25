@@ -123,7 +123,8 @@ abstract class MultiCurl {
         $mh = curl_multi_init();
         curl_multi_add_handle($mh, $ch);
         $this->sessions[] = array($mh, $ch, $url);
-        $this->execSession(array_pop(array_keys($this->sessions)));
+        $sessions_key = array_keys($this->sessions);
+        $this->execSession(array_pop($sessions_key));
     }
 
     /**
