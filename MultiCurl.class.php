@@ -141,7 +141,7 @@ abstract class MultiCurl {
      */
     protected function checkSessions() {
         foreach ($this->sessions as $i => $sess) {
-            if (curl_multi_select($sess[0]) != -1) {
+            if ($this->multiSelect($sess[0]) != -1) {
                 $this->execSession($i);
             }
         }
@@ -161,6 +161,26 @@ abstract class MultiCurl {
              curl_getinfo($ch, CURLINFO_SIZE_DOWNLOAD) >= $this->maxSize) {
             $this->closeSession($i);
         }
+    }
+
+    /**
+     * Replace curl_multi_select.
+     *
+     * @see http://php.net/manual/en/function.curl-multi-select.php#110869
+     * @param resource $mh A cURL multi handle returned by curl_multi_init().
+     * @param float $timeout Time, in seconds, to wait for a response.
+     */
+    protected function multiSelect($mh, $timeout = 1.0) {
+        $ts = microtime(true);
+
+        do {
+            $mrc = curl_multi_exec($mh, $act);
+            $ct = microtime(true);
+            $t = $ct - $ts;
+            if ($t >= $timeout) {
+                return CURLM_CALL_MULTI_PERFORM;
+            }
+        } while ($mrc == CURLM_CALL_MULTI_PERFORM);
     }
 
     /**
