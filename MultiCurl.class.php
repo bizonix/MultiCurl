@@ -144,6 +144,9 @@ abstract class MultiCurl {
             if ($this->multiSelect($sess[0]) != -1) {
                 $this->execSession($i);
             }
+            else {
+                throw new Exception('Multicurl loop detected!');
+            }
         }
     }
 
@@ -153,14 +156,15 @@ abstract class MultiCurl {
      * @param integer $i A session id.
      */
     protected function execSession($i) {
-        list($mh, $ch) = $this->sessions[$i];
-
-        while (($mrc = curl_multi_exec($mh, $act)) == CURLM_CALL_MULTI_PERFORM);
-
-        if (!$act || $mrc != CURLM_OK ||
-             curl_getinfo($ch, CURLINFO_SIZE_DOWNLOAD) >= $this->maxSize) {
-            $this->closeSession($i);
-        }
+    	list($mh, $ch) = $this->sessions[$i];
+    	if ($mh) {
+            do {
+                $mrc = curl_multi_exec($mh, $act);
+            } while ($act > 0);
+            if (!$act || $mrc !== CURLM_OK || curl_getinfo($ch, CURLINFO_SIZE_DOWNLOAD) >= $this->maxSize) {
+                $this->closeSession($i);
+            }
+    	}
     }
 
     /**
